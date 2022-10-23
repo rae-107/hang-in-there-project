@@ -161,6 +161,7 @@ makePosterButton.addEventListener('click', function(event) {
   event.preventDefault()
   makeMyPoster(titleInput, quoteInput, imageInput)
   pushInputsToData(titleInput, quoteInput, imageInput)
+  defaultEmptyFormPoster()
   switchViews(mainPageView)
 })
 
@@ -170,12 +171,6 @@ savePosterGrid.addEventListener('dblclick', function(event) {
 })
 
 // functions and event handlers go here 👇
-
-function resetForm() {
-  titleInput.value = ''
-  quoteInput.value = ''
-  imageInput.value = ''
-}
 
 function deletePoster(id) {
   for(var i = 0; i < savedPosters.length; i++) {
@@ -230,6 +225,18 @@ function createPoster(title, quote, img) {
   posterImage.src = img
   var saveInstance = new Poster(img, title, quote)
   currentPoster = saveInstance
+}
+
+function resetForm() {
+  titleInput.value = ''
+  quoteInput.value = ''
+  imageInput.value = ''
+}
+
+function defaultEmptyFormPoster() {
+  if(!imageInput.value || !titleInput.value || !quoteInput.value) {
+    createPoster('Is this a poster?', '404: This is not the poster you\'re looking for', 'https://i.guim.co.uk/img/media/44856f0611a6ae5e8f4e1875772d8f462a7e6f10/0_139_1118_671/master/1118.jpg?width=700&quality=85&auto=format&fit=max&s=3be77831a235ffc09d12cf9d18be5f25')
+  }
 }
 
 function makeMyPoster(titleInput, quoteInput, imageInput) {
