@@ -160,8 +160,8 @@ savePosterButton.addEventListener('click', function () {
 makePosterButton.addEventListener('click', function(event) {
   event.preventDefault()
   makeMyPoster(titleInput, quoteInput, imageInput)
-  pushInputsToData(titleInput, quoteInput, imageInput)
   defaultEmptyFormPoster()
+  pushInputsToData(titleInput, quoteInput, imageInput)
   switchViews(mainPageView)
 })
 
@@ -182,9 +182,11 @@ function deletePoster(id) {
 }
 
 function pushInputsToData() {
-  titles.push(titleInput.value)
-  quotes.push(quoteInput.value) 
-  images.push(imageInput.value)
+  if (currentPoster.title !== 'Is this a poster?') {
+    titles.push(titleInput.value)
+    quotes.push(quoteInput.value) 
+    images.push(imageInput.value)
+  }
 }
 
 function switchViews(goToView) {
@@ -196,13 +198,13 @@ function switchViews(goToView) {
 function showSavedPosters() {
   savePosterGrid.innerHTML = ""
   for(var i = 0; i < savedPosters.length; i++) {
-  var showGridDisplay = 
-    `<article class="mini-poster" id="${savedPosters[i].id}"> 
-      <img src="${savedPosters[i].imageURL}" alt="mini nothin' to see here">
-      <h2>${savedPosters[i].title}</h2>
-      <h4>${savedPosters[i].quote}</h4> 
-    </article>`
-  savePosterGrid.innerHTML += showGridDisplay
+    var showGridDisplay = 
+      `<article class="mini-poster" id="${savedPosters[i].id}"> 
+        <img src="${savedPosters[i].imageURL}" alt="mini nothin' to see here">
+        <h2>${savedPosters[i].title}</h2>
+        <h4>${savedPosters[i].quote}</h4> 
+      </article>`
+    savePosterGrid.innerHTML += showGridDisplay
   }
 }
 
@@ -244,7 +246,7 @@ function makeMyPoster(titleInput, quoteInput, imageInput) {
 }
 
 function saveCurrentPoster() {
-  if (!savedPosters.includes(currentPoster)) {
+  if (!savedPosters.includes(currentPoster) && currentPoster.title !== 'Is this a poster?') {
     savedPosters.push(currentPoster)
   }
 }
