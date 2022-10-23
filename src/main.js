@@ -1,6 +1,35 @@
 // query selector variables go here 👇
 
+// navigation 
+var currentPageView = document.querySelector('.main-poster')
+var mainPageView = document.querySelector('.main-poster')
+var formView = document.querySelector('.poster-form')
+var savedPostersView = document.querySelector('.saved-posters')
+
+// saved poster grid element
+var savePosterGrid = document.querySelector('.saved-posters-grid')
+
+// main poster elements
+var posterTitle = document.querySelector('.poster-title')
+var posterQuote = document.querySelector('.poster-quote')
+var posterImage = document.querySelector('.poster-img')
+
+// buttons
+var showRandomButton = document.querySelector('.show-random') 
+var showFormButton = document.querySelector('.show-form')
+var savePosterButton = document.querySelector('.save-poster')
+var showSavedButton = document.querySelector('.show-saved')
+var showMainButton = document.querySelector('.show-main')
+var backToMainButton = document.querySelector('.back-to-main')
+var makePosterButton = document.querySelector('.make-poster')
+
+// form inputs
+var titleInput = document.querySelector('#poster-title')
+var quoteInput = document.querySelector('#poster-quote')
+var imageInput = document.querySelector('#poster-image-url')
+
 // we've provided you with some data to work with 👇
+
 var images = [
   "./assets/bees.jpg",
   "./assets/bridge.jpg",
@@ -20,7 +49,7 @@ var images = [
   "./assets/squirrel.jpg",
   "./assets/tiger.jpg",
   "./assets/turtle.jpg"
-];
+]
 var titles = [
   "determination",
   "success",
@@ -57,7 +86,7 @@ var titles = [
   "trust",
   "understanding",
   "wisdom"
-];
+]
 var quotes = [
   "Don’t downgrade your dream just to fit your reality, upgrade your conviction to match your destiny.",
   "You are braver than you believe, stronger than you seem and smarter than you think.",
@@ -97,73 +126,60 @@ var quotes = [
   "No matter what people tell you, words and ideas can change the world.",
   "Each person must live their life as a model for others.",
   "A champion is defined not by their wins but by how they can recover when they fall."
-];
+]
+
 var savedPosters = []
 var currentPoster
-var currentPageView = document.querySelector('.main-poster')
-var mainPageView = document.querySelector('.main-poster')
-var formView = document.querySelector('.poster-form')
-var savedPostersView = document.querySelector('.saved-posters')
-var savePosterGrid = document.querySelector('.saved-posters-grid')
 
-// event listeners go here 👇
-var posterTitle = document.querySelector(".poster-title")
-var posterQuote = document.querySelector(".poster-quote")
-var posterImage = document.querySelector(".poster-img")
+window.addEventListener('load', createsRandomPoster)
 
-// buttons
-var showRandomButton = document.querySelector(".show-random") 
-var showFormButton = document.querySelector('.show-form')
-var savePosterButton = document.querySelector('.save-poster')
-var showSavedButton = document.querySelector('.show-saved')
-var showMainButton = document.querySelector('.show-main')
-var backToMainButton = document.querySelector('.back-to-main')
-var makePosterButton = document.querySelector('.make-poster')
+showRandomButton.addEventListener('click', createsRandomPoster)
 
-// Form inputs
-var titleInput = document.querySelector('#poster-title')
-var quoteInput = document.querySelector('#poster-quote')
-var imageInput = document.querySelector('#poster-image-url')
-
-window.addEventListener("load", createsRandomPoster)
-
-showRandomButton.addEventListener("click", createsRandomPoster)
-
-showFormButton.addEventListener("click", function() {
-  switchingViews(formView)
+showFormButton.addEventListener('click', function() {
+  switchViews(formView)
 })
-showSavedButton.addEventListener("click", function() {
-  switchingViews(savedPostersView)
+
+showSavedButton.addEventListener('click', function() {
+  switchViews(savedPostersView)
   showSavedPosters()
 })
+
 showMainButton.addEventListener('click', function () {
-  switchingViews(mainPageView)
-})
-backToMainButton.addEventListener('click', function () {
-  switchingViews(mainPageView)
-})
-savePosterButton.addEventListener("click", function (){
-  saveCurrentPoster()
+  switchViews(mainPageView)
 })
 
-makePosterButton.addEventListener("click", function(event) {
+backToMainButton.addEventListener('click', function () {
+  switchViews(mainPageView)
+})
+
+savePosterButton.addEventListener('click', function () {
+  saveCurrentPoster()
+  resetForm()
+})
+
+makePosterButton.addEventListener('click', function(event) {
   event.preventDefault()
   makeMyPoster(titleInput, quoteInput, imageInput)
   pushInputsToData(titleInput, quoteInput, imageInput)
-  switchingViews(mainPageView)
+  switchViews(mainPageView)
 })
 
 savePosterGrid.addEventListener('dblclick', function(event) {
-  // console.log(event.target.closest('.mini-poster').id) 
   var id = event.target.closest('.mini-poster').id
   deletePoster(id)
 })
 
 // functions and event handlers go here 👇
 
+function resetForm() {
+  titleInput.value = ''
+  quoteInput.value = ''
+  imageInput.value = ''
+}
+
 function deletePoster(id) {
   for(var i = 0; i < savedPosters.length; i++) {
-    if(savedPosters[i].id === +id) {
+    if (savedPosters[i].id === +id) {
       savedPosters.splice(i, 1)
     }
   }
@@ -176,12 +192,7 @@ function pushInputsToData() {
   images.push(imageInput.value)
 }
 
-function makeMyPoster(titleInput, quoteInput, imageInput) {
-  var userNewPoster = new Poster(imageInput.value, titleInput.value, quoteInput.value)
-  createPoster(userNewPoster.title, userNewPoster.quote, userNewPoster.imageURL)
-}
-
-function switchingViews(goToView) {
+function switchViews(goToView) {
   currentPageView.classList.toggle('hidden')
   goToView.classList.toggle('hidden')
   currentPageView = goToView
@@ -189,20 +200,18 @@ function switchingViews(goToView) {
 
 function showSavedPosters() {
   savePosterGrid.innerHTML = ""
-  for(var i = 0; i < savedPosters.length; i++){
-  var showGridDisplay = `<article class="mini-poster" id="${savedPosters[i].id}"> 
-  <img src="${savedPosters[i].imageURL}" alt="mini nothin' to see here">
-  <h2>${savedPosters[i].title}</h2>
-  <h4>${savedPosters[i].quote}</h4> 
-  </article>`
+  for(var i = 0; i < savedPosters.length; i++) {
+  var showGridDisplay = 
+    `<article class="mini-poster" id="${savedPosters[i].id}"> 
+      <img src="${savedPosters[i].imageURL}" alt="mini nothin' to see here">
+      <h2>${savedPosters[i].title}</h2>
+      <h4>${savedPosters[i].quote}</h4> 
+    </article>`
   savePosterGrid.innerHTML += showGridDisplay
   }
-  // console.log(savePosterGrid.innerHTML)
-  console.log('poster.id', currentPoster.id)
-
 }
 
-function createsRandomPoster (){
+function createsRandomPoster() {
   var titleIndex = getRandomIndex(titles)
   var title = titles[titleIndex]
   
@@ -223,13 +232,19 @@ function createPoster(title, quote, img) {
   currentPoster = saveInstance
 }
 
-function saveCurrentPoster(){
-  if(!savedPosters.includes(currentPoster)){
+function makeMyPoster(titleInput, quoteInput, imageInput) {
+  createPoster(titleInput.value, quoteInput.value, imageInput.value)
+}
+
+function saveCurrentPoster() {
+  if (!savedPosters.includes(currentPoster)) {
     savedPosters.push(currentPoster)
   }
 }
+
 // (we've provided one for you to get you started)!
+
 function getRandomIndex(array) {
-  return Math.floor(Math.random() * array.length);
+  return Math.floor(Math.random() * array.length)
 }
 
